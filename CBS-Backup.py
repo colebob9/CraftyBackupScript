@@ -2,6 +2,8 @@
 CraftyBackupScript - Backup
 v0.3.1
 Linux only.
+Written by colebob9 in Python 3.
+Released under the MIT License.
 
 Required Packages for Linux:
     p7zip
@@ -23,7 +25,8 @@ Start backup process
     Compress all server data and put in their respective .ZIP or 7z archives.
         Save with format `<servername>_mm-dd-yy_hh-mm.7z`
     `save-on`
-    Delete backup file outside of file limit determined by last file creation date.
+    
+    ::Delete backup file outside of file limit determined by last file creation date.:: <- Last thing to add
     
 Send `stop` command to make server restart.
 ~~~~~~~~~~~~~~~~~
@@ -34,7 +37,7 @@ import subprocess
 import shlex
 import time
 
-# Config
+# :::Config:::
 
 # Minecraft Server
 minecraftServer = True # To put in minecraft server mode. 
@@ -49,7 +52,7 @@ savePath = "/home/cabox/workspace/CCNetwork/Backup/BackupArchives/Server1/" # To
 datetime = time.strftime("%m-%d-%Y--%I:%M%p") # Time format
 archiveName = "Server1_Backup_" + datetime  # Name of backup archive
 
-# End Config.
+# :::End Config.:::
 
 print("CraftyBackupScript")
 print("")
