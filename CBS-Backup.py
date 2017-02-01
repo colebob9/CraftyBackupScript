@@ -1,12 +1,13 @@
 """
 CraftyBackupScript - Backup
-v0.3.0
+v0.3.1
 Linux only.
 
-Requirements on Linux:
-p7zip
-p7zip-full
-screen
+Required Packages for Linux:
+    p7zip
+    p7zip-full
+    screen
+    python3
 
 command for inside screen:
 screen -S minecraft -p 0 -X stuff "say Backing up the server...\n"
@@ -37,8 +38,8 @@ import time
 
 # Minecraft Server
 minecraftServer = True # To put in minecraft server mode. 
-screenName = "" # Name of opened screen.
-stopServerAfter = True # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
+screenName = "minecraft" # Name of opened screen.
+stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
 
 # File Paths (needs to be changed)
 serverPath = "/home/cabox/workspace/CCNetwork/Server1/" # Path to folder of server to be backed up.
@@ -55,14 +56,14 @@ print("")
 
 # Minecraft Server Managing
 if minecraftServer:
-    subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"\n\"")) # Presses Enter in case of left over command.
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"\n\"" % (screenName))) # Presses Enter in case of left over command.
     print("Saying warning message(s)")
-    subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"say Backing up the server...\n\""))
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"say Backing up the server...\n\"" % (screenName)))
     print("Turning saving off temporarily...")
-    subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"save-off\n\"")) # save-off
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-off\n\"" % (screenName))) # save-off
     time.sleep(1)
     print("Manually saving...")
-    subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"save-all\n\"")) # save-all
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-all\n\"" % (screenName))) # save-all
     time.sleep(10)
     
 
@@ -77,11 +78,11 @@ print("Done with backup.")
 
 if minecraftServer:
     print("Re-enabling saving.")
-    subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"save-on\n\""))
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-on\n\"" % (screenName))) # save-on
     if stopServerAfter:
         print("Stopping server in 5 seconds...")
         time.sleep(5)
         print("Now stopping server.")
-        subprocess.call(shlex.split("screen -S minecraft -p 0 -X stuff \"stop\n\""))
+        subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"stop\n\"" % (screenName))) # stop
 
 
