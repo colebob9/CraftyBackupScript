@@ -42,7 +42,7 @@ import time
 # Minecraft Server
 minecraftServer = True # To put in minecraft server mode. 
 screenName = "minecraft" # Name of opened screen.
-stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
+stopServerAfter = True # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
 
 # File Paths (needs to be changed)
 serverPath = "/home/cabox/workspace/CCNetwork/Server1/" # Path to folder of server to be backed up.
@@ -53,13 +53,14 @@ datetime = time.strftime("%m-%d-%Y--%I:%M%p") # Time format
 archiveName = "Server1_Backup_" + datetime  # Name of backup archive
 
 # Time
-saveAllTime = 10 # Time to wait for the manual save before continuing
+saveAllTime = 10 # Time in seconds to wait for the manual save before continuing
 
 # Script
 showExtraInfo = True # Whether to show lines like file paths or commands used.
 
 # :::End Config.:::
 
+# To send commands to a Minecraft server in a Screen
 def minecraftCommand(serverCommand):
     subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"%s\n\"" % (screenName, serverCommand)))
     if showExtraInfo:
@@ -103,6 +104,7 @@ if minecraftServer:
         print("Stopping server in 5 seconds...")
         time.sleep(5)
         print("Now stopping server.")
+        minecraftCommand("say Server is now restarting...")
         minecraftCommand("stop") # stop
 
 
