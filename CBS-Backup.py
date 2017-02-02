@@ -39,7 +39,9 @@ import time
 
 # Start elasped time
 start = time.time()
+
 # :::Config:::
+#
 
 # Minecraft Server
 minecraftServer = True # To put in minecraft server mode. 
@@ -58,8 +60,9 @@ archiveName = "Server1_Backup_" + datetime  # Name of backup archive
 saveAllTime = 8 # Time in seconds to wait for the manual save before continuing.
 
 # Script
-showExtraInfo = True # Whether to show lines like file paths or commands used.
+showExtraInfo = False # Whether to show lines like file paths or commands used.
 
+#
 # :::End Config.:::
 
 # To send commands to a Minecraft server in a Screen
@@ -90,7 +93,7 @@ if minecraftServer:
 
 # Name preview
 print("Archive named:\n%s.7z" % (archiveName))
-# Compress with 7z.
+# Compress with 7zip.
 # -mx9 = Ultra Compression | -t7z = Specify .7z format | -mmt = Multithreading
 if showExtraInfo:
     print("Using command:\n7z a -mx9 -t7z -mmt %s%s.7z %s*" % (savePath, archiveName, serverPath))
@@ -103,9 +106,11 @@ elaspedTime7z = (end7z - start7z)
 print("Compression took " + str(round(elaspedTime7z , 1)) + " seconds")
 
 if minecraftServer:
+    # Re-enabling saves
     print("Re-enabling saving.")
-    minecraftCommand("save-on") # save-on
+    minecraftCommand("save-on")
     minecraftCommand("save-all") # Save once more in case of long backup process.
+    # Stop Minecraft server
     if stopServerAfter:
         print("Stopping server in 5 seconds...")
         time.sleep(5)
@@ -113,9 +118,9 @@ if minecraftServer:
         minecraftCommand("say Server is now restarting...")
         minecraftCommand("stop") # stop
 
-end = time.time()
 
 # Elapsed time for entire process
+end = time.time()
 elaspedTime = (end - start)
 print("Overall backup process took " + str(round(elaspedTime , 1)) + " seconds")
 
