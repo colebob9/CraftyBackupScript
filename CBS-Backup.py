@@ -1,6 +1,6 @@
 """
 CraftyBackupScript - Backup
-v0.3.1
+v0.3.2
 Linux only.
 Written by colebob9 in Python 3.
 Released under the MIT License.
@@ -52,40 +52,57 @@ savePath = "/home/cabox/workspace/CCNetwork/Backup/BackupArchives/Server1/" # To
 datetime = time.strftime("%m-%d-%Y--%I:%M%p") # Time format
 archiveName = "Server1_Backup_" + datetime  # Name of backup archive
 
+# Time
+saveAllTime = 10 # Time to wait for the manual save before continuing
+
+# Script
+showExtraInfo = True # Whether to show lines like file paths or commands used.
+
 # :::End Config.:::
 
-print("CraftyBackupScript")
+def minecraftCommand(serverCommand):
+    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"%s\n\"" % (screenName, serverCommand)))
+    if showExtraInfo:
+        print("Using command:\nscreen -S %s -p 0 -X stuff \"%s\"\n" % (screenName, serverCommand))
+
+# Title
+print("CraftyBackupScript v0.3.2")
 print("")
 
 # Minecraft Server Managing
 if minecraftServer:
-    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"\n\"" % (screenName))) # Presses Enter in case of left over command.
+    minecraftCommand("") # Enter to 
     print("Saying warning message(s)")
-    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"say Backing up the server...\n\"" % (screenName)))
+    if stopServerAfter:
+        minecraftCommand("say Server is backing up and restarting...")
+    else:
+        minecraftCommand("say Server is now backing up...")
     print("Turning saving off temporarily...")
-    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-off\n\"" % (screenName))) # save-off
+    minecraftCommand("save-off") # save-off
     time.sleep(1)
     print("Manually saving...")
-    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-all\n\"" % (screenName))) # save-all
-    time.sleep(10)
+    minecraftCommand("save-all") # save-all
+    time.sleep(saveAllTime)
     
 
 # Name preview
 print("Archive named:\n%s.7z" % (archiveName))
 # Compress with 7z.
 # -mx9 = Ultra Compression | -t7z = Specify .7z format | -mmt = Multithreading
-print("Using command:\n7z a -mx9 -t7z -mmt %s%s.7z %s*" % (savePath, archiveName, serverPath))
+if showExtraInfo:
+    print("Using command:\n7z a -mx9 -t7z -mmt %s%s.7z %s*" % (savePath, archiveName, serverPath))
 subprocess.call(shlex.split("7z a -mx9 -t7z -mmt %s%s.7z %s*" % (savePath, archiveName, serverPath)))
 
 print("Done with backup.")
 
 if minecraftServer:
     print("Re-enabling saving.")
-    subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"save-on\n\"" % (screenName))) # save-on
+    minecraftCommand("save-on") # save-on
+    minecraftCommand("save-all") # Save once more in case of long backup process.
     if stopServerAfter:
         print("Stopping server in 5 seconds...")
         time.sleep(5)
         print("Now stopping server.")
-        subprocess.call(shlex.split("screen -S %s -p 0 -X stuff \"stop\n\"" % (screenName))) # stop
+        minecraftCommand("stop") # stop
 
 
