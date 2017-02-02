@@ -42,7 +42,7 @@ import time
 # Minecraft Server
 minecraftServer = True # To put in minecraft server mode. 
 screenName = "minecraft" # Name of opened screen.
-stopServerAfter = True # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
+stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
 
 # File Paths (needs to be changed)
 serverPath = "/home/cabox/workspace/CCNetwork/Server1/" # Path to folder of server to be backed up.
