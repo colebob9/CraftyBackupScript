@@ -1,6 +1,6 @@
 """
 CraftyBackupScript - Backup
-v0.4.0
+v0.5.0
 Linux only.
 Written by colebob9 in Python 3.
 Released under the MIT License.
@@ -26,7 +26,7 @@ Start backup process
         Save with format `<servername>_mm-dd-yy_hh-mm.7z`
     `save-on`
     
-    ::Delete backup file outside of file limit determined by last file creation date.:: <- Last thing to add
+    Delete backup file outside of file limit determined by last file creation date.
     
 Send `stop` command to make server restart.
 ~~~~~~~~~~~~~~~~~
@@ -36,6 +36,7 @@ Send `stop` command to make server restart.
 import subprocess
 import shlex
 import time
+import os, os.path
 
 # Start elasped time
 start = time.time()
@@ -44,8 +45,10 @@ start = time.time()
 #
 
 # Minecraft Server
-minecraftServer = True # To put in minecraft server mode. 
-screenName = "minecraft" # Name of opened screen.
+minecraftServer = True # REQUIRED FOR USING WITH A MINECRAFT SERVER 
+                       # Turns on whether to send commmands to safely manage a Minecraft server during a backup. 
+                       # (Toggles autosaving in order to not corrupt the backup copy.)
+screenName = "minecraft" # Name of opened screen where the Minecraft server is online.
 stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
 
 # File Paths (needs to be changed)
@@ -56,11 +59,14 @@ savePath = "/home/cabox/workspace/CCNetwork/Backup/BackupArchives/Server1/" # To
 datetime = time.strftime("%m-%d-%Y--%I:%M%p") # Time format
 archiveName = "Server1_Backup_" + datetime  # Name of backup archive
 
-# Time
-saveAllTime = 8 # Time in seconds to wait for the manual save before continuing.
-
 # Script
 showExtraInfo = False # Whether to show lines like file paths or commands used.
+saveAllTime = 8 # Time in seconds to wait for the manual save before continuing.
+
+# Aged File Cleanup
+agedFileCleanup = True # Whether to enable deleting files after a certain amount of time. (Highly recommended for automatically run backups.)
+keepFileTime = 7 # Time in days to wait before deleting an old backup.
+
 
 #
 # :::End Config.:::
@@ -72,7 +78,7 @@ def minecraftCommand(serverCommand):
         print("Using command:\nscreen -S %s -p 0 -X stuff \"%s\"\n" % (screenName, serverCommand))
 
 # Title
-print("CraftyBackupScript v0.4.0")
+print("CraftyBackupScript v0.5.0")
 print("")
 
 # Minecraft Server Managing
@@ -89,7 +95,8 @@ if minecraftServer:
     print("Manually saving...")
     minecraftCommand("save-all") # save-all
     time.sleep(saveAllTime)
-    
+else:
+    print("Minecraft mode disabled, continuing...")
 
 # Name preview
 print("Archive named:\n%s.7z" % (archiveName))
@@ -118,9 +125,43 @@ if minecraftServer:
         minecraftCommand("say Server is now restarting...")
         minecraftCommand("stop") # stop
 
+# Aged file cleanup
 
+if agedFileCleanup:
+    if showExtraInfo:
+        print("Using path: " + savePath)
+        for filename in os.listdir(savePath):
+                print("Found file: " + filename)
+
+    fileDeleted = False   
+    countOfFilesDeleted = 0
+
+    current_time = time.time()        
+    for f in os.listdir(savePath):
+        file = savePath + f
+        creation_time = os.path.getctime(file)
+        if (current_time - creation_time) // (24 * 3600) >= keepFileTime:
+            if file.endswith('.7z'):
+                os.remove(file)
+                if showExtraInfo:
+                    print('%s removed.' % (file))
+                else:
+                    print('%s removed.' % (f))
+                fileDeleted = True
+                countOfFilesDeleted = countOfFilesDeleted + 1
+
+    if fileDeleted:
+        print("%s files cleaned up outside of %s days." % (countOfFilesDeleted, keepFileTime))
+    else:
+        print("No old files found outside of %s days!" % (keepFileTime))
+else:
+    print("Aged file cleanup disabled.")
+        
+        
 # Elapsed time for entire process
 end = time.time()
 elaspedTime = (end - start)
 print("Overall backup process took " + str(round(elaspedTime , 1)) + " seconds")
+
+
 
