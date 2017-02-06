@@ -127,29 +127,32 @@ if minecraftServer:
 
 # Aged file cleanup
 
+# Shows list of found files in directory
 if agedFileCleanup:
     if showExtraInfo:
         print("Using path: " + savePath)
         for filename in os.listdir(savePath):
                 print("Found file: " + filename)
 
+    # Declaring variables
     fileDeleted = False   
     countOfFilesDeleted = 0
 
-    current_time = time.time()        
+    current_time = time.time()
     for f in os.listdir(savePath):
-        file = savePath + f
+        file = savePath + f # Combined variable
         creation_time = os.path.getctime(file)
         if (current_time - creation_time) // (24 * 3600) >= keepFileTime:
             if file.endswith('.7z'):
                 os.remove(file)
                 if showExtraInfo:
-                    print('%s removed.' % (file))
+                    print('%s removed.' % (file)) # Shows entire path + file name.
                 else:
-                    print('%s removed.' % (f))
+                    print('%s removed.' % (f)) # Only shows file name.
+                
                 fileDeleted = True
                 countOfFilesDeleted = countOfFilesDeleted + 1
-
+                
     if fileDeleted:
         print("%s files cleaned up outside of %s days." % (countOfFilesDeleted, keepFileTime))
     else:
