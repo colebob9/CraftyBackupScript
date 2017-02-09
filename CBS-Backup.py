@@ -1,6 +1,6 @@
 """
 CraftyBackupScript - Backup
-v0.5.0
+v0.5.1
 Linux only.
 Written by colebob9 in Python 3.
 Released under the MIT License.
@@ -48,8 +48,8 @@ start = time.time()
 minecraftServer = True # REQUIRED FOR USING WITH A MINECRAFT SERVER 
                        # Turns on whether to send commmands to safely manage a Minecraft server during a backup. 
                        # (Toggles autosaving in order to not corrupt the backup copy.)
-screenName = "minecraft" # Name of opened screen where the Minecraft server is online.
-stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript.
+screenName = "test1" # Name of opened screen where the Minecraft server is online.
+stopServerAfter = False # If the Minecraft server will be told to stop after a backup. Meant for use with CraftyStartScript for a restart.
 
 # File Paths (needs to be changed)
 serverPath = "/home/cabox/workspace/CCNetwork/Server1/" # Path to folder of server to be backed up.
@@ -78,7 +78,7 @@ def minecraftCommand(serverCommand):
         print("Using command:\nscreen -S %s -p 0 -X stuff \"%s\"\n" % (screenName, serverCommand))
 
 # Title
-print("CraftyBackupScript v0.5.0")
+print("CraftyBackupScript v0.5.1")
 print("")
 
 # Minecraft Server Managing
@@ -117,6 +117,7 @@ if minecraftServer:
     print("Re-enabling saving.")
     minecraftCommand("save-on")
     minecraftCommand("save-all") # Save once more in case of long backup process.
+    minecraftCommand("say Backup complete!")
     # Stop Minecraft server
     if stopServerAfter:
         print("Stopping server in 5 seconds...")
