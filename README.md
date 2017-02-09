@@ -29,7 +29,7 @@ Run with command `python3 CBS-Backup.py`
 * Linux packages: `p7zip`, `p7zip-full`, `python3`, `screen`
 
 ## Notes
-[Released under the MIT license.](https://github.com/colebob9/AutoChunky/blob/master/LICENSE) 
+[Released under the MIT license.](https://github.com/colebob9/CraftyBackupScript/blob/master/LICENSE) 
 
 Please [report any issues](https://github.com/colebob9/CraftyBackupScript/issues) my program may have. [Pull requests](https://github.com/colebob9/CraftyBackupScript/pulls) are welcome too!
 
