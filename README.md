@@ -34,6 +34,8 @@ To configure this script, add lines to the bottom specifying the orginal backup 
 
 This script is meant to be manually triggered as backups are not deleted in the Snapshots folder.
 
+If you want to make the latest snapshot fo  all the servers you have, make a shell script triggering every Backup script ([example](https://gist.github.com/colebob9/acc66116d849fa2bb351a27c56fe3762)), then trigger both scripts by using command `./backupall.sh; python3 CBS-Snapshot.py`
+
 ## Requirements
 * Python 3 (to run the script)
 * Any plain text editor: Notepad++, TextEdit, or nano will do fine.
